@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
@@ -95,7 +96,7 @@ const Index = () => {
       {/* Header */}
       <header className="border-b bg-white p-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-3xl font-instrument font-bold text-audio-dark">
+          <h1 className="text-4xl font-instrument font-bold text-audio-dark">
             Audicle
           </h1>
           <p className="text-sm text-gray-500 mt-1">

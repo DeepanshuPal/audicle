@@ -93,7 +93,7 @@ const ArticleView = ({
         )}
       </form>
       
-      <ScrollArea className="flex-1 h-[calc(70vh-80px)]">
+      <ScrollArea className="flex-1 overflow-auto h-[calc(70vh-80px)]">
         <div className="p-6">
           {article ? (
             <div className="prose prose-sm max-w-none">

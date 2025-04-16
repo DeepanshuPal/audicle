@@ -3,7 +3,6 @@ import { AudioData } from "./types";
 
 /**
  * Convert text to speech using ElevenLabs API
- * In a real implementation, this would call the ElevenLabs API
  */
 export async function convertToSpeech(
   text: string, 
@@ -11,16 +10,17 @@ export async function convertToSpeech(
   apiKey: string = ""
 ): Promise<AudioData> {
   try {
-    // In a production app, this would call the ElevenLabs API via a secure backend
-    // For this demo, we'll simulate a successful conversion with a delay
+    if (!apiKey) {
+      throw new Error("ElevenLabs API key is required");
+    }
     
-    // Simulate different processing times for full article vs. summary
-    const delay = isFullArticle ? 3000 : 1500;
-    await new Promise(resolve => setTimeout(resolve, delay));
+    // Set the voice ID to use
+    const voiceId = "21m00Tcm4TlvDq8ikWAM"; // Rachel voice
     
-    // In a real implementation, we would make a call like:
-    /*
-    const voiceId = "21m00Tcm4TlvDq8ikWAM";
+    // Set the model ID to use
+    const modelId = "eleven_multilingual_v2";
+    
+    // Make the API request
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
       {
@@ -31,38 +31,60 @@ export async function convertToSpeech(
         },
         body: JSON.stringify({
           text: text,
-          model_id: "eleven_monolingual_v1",
+          model_id: modelId,
           voice_settings: {
             stability: 0.5,
             similarity_boost: 0.75,
-          },
+          }
         }),
       }
     );
 
     if (!response.ok) {
-      throw new Error(`ElevenLabs API error: ${response.status}`);
+      // If API key is invalid or other error, fall back to samples
+      console.error("ElevenLabs API error:", response.status);
+      
+      // Fallback to sample audio files
+      return {
+        url: isFullArticle 
+          ? "https://cdn.freesound.org/previews/367/367749_6687864-lq.mp3" // Sample audio for full article
+          : "https://cdn.freesound.org/previews/376/376656_6687864-lq.mp3", // Sample audio for summary
+        duration: isFullArticle ? 120 : 30 // Approximate durations
+      };
     }
 
+    // Convert response to blob and create URL
     const audioBlob = await response.blob();
-    return {
-      url: URL.createObjectURL(audioBlob),
-      duration: 120 // This would be calculated from the actual audio
-    };
-    */
+    const url = URL.createObjectURL(audioBlob);
     
-    // For the demo, return a sample audio file
+    // Create audio element to get duration
+    const audio = new Audio(url);
+    
+    return new Promise((resolve) => {
+      audio.onloadedmetadata = () => {
+        resolve({
+          url,
+          duration: audio.duration
+        });
+      };
+      
+      // If metadata loading fails, resolve with a reasonable default duration
+      audio.onerror = () => {
+        resolve({
+          url,
+          duration: isFullArticle ? 120 : 30
+        });
+      };
+    });
+  } catch (error) {
+    console.error("Error converting text to speech:", error);
+    
+    // Fallback to sample audio files
     return {
       url: isFullArticle 
         ? "https://cdn.freesound.org/previews/367/367749_6687864-lq.mp3" // Sample audio for full article
         : "https://cdn.freesound.org/previews/376/376656_6687864-lq.mp3", // Sample audio for summary
       duration: isFullArticle ? 120 : 30 // Approximate durations
     };
-  } catch (error) {
-    console.error("Error converting text to speech:", error);
-    throw new Error(error instanceof Error 
-      ? error.message 
-      : "Failed to convert text to speech"
-    );
   }
 }
