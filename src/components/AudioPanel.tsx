@@ -132,7 +132,7 @@ const AudioPanel = ({
   return (
     <div className="h-full flex flex-col items-center justify-between p-8">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-audio-dark">
+        <h2 className="text-2xl font-instrument font-bold text-audio-dark">
           {isFullArticle ? fullArticleTitle : cruxTitle}
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -143,10 +143,16 @@ const AudioPanel = ({
       </div>
       
       <div className="flex-1 w-full flex items-center justify-center">
-        <div className="relative w-full h-64 flex items-center justify-center">
-          <AudioWaveform 
-            isPlaying={playerState === PlayerState.PLAYING}
-            audioElement={audioRef.current}
+        <div className="relative w-full flex flex-col items-center justify-center">
+          <img 
+            src="/lovable-uploads/f7763f1e-4560-4293-9b14-14cad7573616.png" 
+            alt="Record Player" 
+            className="w-64 h-64 object-contain mx-auto"
+          />
+          
+          {/* Add a spinning animation to the record when playing */}
+          <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-black ${playerState === PlayerState.PLAYING ? 'animate-spin' : ''}`} 
+               style={{ animationDuration: '2s' }}
           />
         </div>
       </div>

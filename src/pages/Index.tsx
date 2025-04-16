@@ -96,8 +96,8 @@ const Index = () => {
       {/* Header */}
       <header className="border-b bg-white p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-audio-dark">
-            Crux <span className="text-audio">Audio</span> Scribe
+          <h1 className="text-2xl font-instrument font-bold text-audio-dark">
+            Audicle
           </h1>
           <Button 
             variant="outline" 
@@ -141,7 +141,7 @@ const Index = () => {
       <footer className="border-t bg-white p-4 text-center text-sm text-gray-500">
         <div className="container mx-auto">
           <p>
-            Crux Audio Scribe • Convert articles to audio with AI summarization
+            Audicle • Convert articles to audio with AI summarization
           </p>
         </div>
       </footer>
