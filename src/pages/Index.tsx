@@ -110,18 +110,17 @@ const Index = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col bg-cover bg-center" 
-         style={{ backgroundImage: `url('/lovable-uploads/golden-gate-bridge.png')` }}>
+    <div className="min-h-screen flex flex-col bg-white">
       {/* Header */}
       <header className="pt-8 pb-4 text-center">
-        <h1 className="text-4xl font-bold text-white drop-shadow-md">Audicle</h1>
+        <h1 className="text-4xl font-bold text-gray-700">Audicle</h1>
       </header>
       
       {/* Main content */}
       <main className="flex-1 container mx-auto p-6 flex flex-col">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
           {/* Left panel */}
-          <div className="bg-white rounded-xl p-6 shadow-lg">
+          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200">
             <div className="flex space-x-2 mb-4">
               <Input
                 placeholder="Paste article URL here and press Enter"
@@ -132,7 +131,7 @@ const Index = () => {
                 disabled={isLoading}
               />
               <Button 
-                className="bg-gray-500 hover:bg-gray-600" 
+                className="bg-gray-400 hover:bg-gray-500 text-white" 
                 disabled={!url.trim() || isLoading}
                 onClick={handleSubmitUrl}
               >
@@ -182,7 +181,7 @@ const Index = () => {
           </div>
           
           {/* Right panel */}
-          <div className="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center">
+          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col items-center">
             <div className="flex-1 flex items-center justify-center">
               <img 
                 src="/lovable-uploads/record-player.png" 
@@ -201,9 +200,13 @@ const Index = () => {
                 <div className="bg-blue-500 h-full rounded-full" style={{ width: "0%" }}></div>
               </div>
               
-              <div className="flex items-center justify-center">
-                <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
-                  <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-blue-500 border-b-8 border-b-transparent ml-1"></div>
+              <div className="flex items-center justify-center my-4">
+                <button className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shadow-md">
+                  <div className="text-blue-500">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                    </svg>
+                  </div>
                 </button>
               </div>
               
@@ -222,14 +225,14 @@ const Index = () => {
               </div>
               
               <div className="flex justify-between gap-4 mt-4">
-                <Button className="w-full bg-blue-500 hover:bg-blue-600">
+                <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white">
                   Full Article
                 </Button>
-                <Button className="w-full bg-blue-500 hover:bg-blue-600">
+                <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white">
                   <Sparkles size={16} className="mr-2" />
                   Play the Crux
                 </Button>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" className="border-gray-300">
                   <Download size={16} />
                 </Button>
               </div>
