@@ -21,6 +21,7 @@ export default {
 		extend: {
 			fontFamily: {
 				'instrument': ['"Instrument Serif"', 'serif'],
+				'inter': ['Inter', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

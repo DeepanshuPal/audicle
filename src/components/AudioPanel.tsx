@@ -145,15 +145,17 @@ const AudioPanel = ({
       <div className="flex-1 w-full flex items-center justify-center">
         <div className="relative w-full flex flex-col items-center justify-center">
           <img 
-            src="/lovable-uploads/f7763f1e-4560-4293-9b14-14cad7573616.png" 
+            src="/lovable-uploads/56ade0a4-1eb8-498c-a87f-43febfb18271.png" 
             alt="Record Player" 
             className="w-64 h-64 object-contain mx-auto"
           />
           
-          {/* Add a spinning animation to the record when playing */}
-          <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-black ${playerState === PlayerState.PLAYING ? 'animate-spin' : ''}`} 
-               style={{ animationDuration: '2s' }}
-          />
+          {/* Record spinning effect only shows up when playing */}
+          {playerState === PlayerState.PLAYING && (
+            <div className="absolute top-[42%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-black/10 animate-spin"
+                 style={{ animationDuration: '2s' }}
+            />
+          )}
         </div>
       </div>
       

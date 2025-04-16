@@ -92,22 +92,27 @@ const Index = () => {
   };
   
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen font-inter">
       {/* Header */}
       <header className="border-b bg-white p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-instrument font-bold text-audio-dark">
+        <div className="container mx-auto text-center">
+          <h1 className="text-3xl font-instrument font-bold text-audio-dark">
             Audicle
           </h1>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => setIsApiKeyModalOpen(true)}
-            className="border-audio/30 text-audio-dark hover:bg-audio hover:text-white"
-          >
-            <Settings className="h-4 w-4 mr-2" />
-            API Keys
-          </Button>
+          <p className="text-sm text-gray-500 mt-1">
+            Convert articles to audio with AI summarization
+          </p>
+          <div className="absolute top-4 right-4">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => setIsApiKeyModalOpen(true)}
+              className="border-audio/30 text-audio-dark hover:bg-audio hover:text-white"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              API Keys
+            </Button>
+          </div>
         </div>
       </header>
       
