@@ -96,7 +96,7 @@ const Index = () => {
       {/* Header */}
       <header className="border-b bg-white p-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-5xl font-instrument font-bold text-audio-dark">
+          <h1 className="text-4xl font-instrument font-bold text-audio-dark">
             Audicle
           </h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -120,7 +120,7 @@ const Index = () => {
       <main className="flex-1 container mx-auto py-6 px-4 flex flex-col">
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 h-[70vh]">
           {/* Left panel */}
-          <div className="article-panel h-[70vh] overflow-hidden">
+          <div className="article-panel overflow-hidden">
             <ArticleView
               article={article}
               status={status}
@@ -130,7 +130,7 @@ const Index = () => {
           </div>
           
           {/* Right panel */}
-          <div className="audio-panel h-[70vh] overflow-hidden">
+          <div className="audio-panel overflow-hidden">
             <AudioPanel
               fullArticleAudio={fullArticleAudio}
               cruxAudio={cruxAudio}

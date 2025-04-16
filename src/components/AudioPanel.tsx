@@ -145,7 +145,7 @@ const AudioPanel = ({
       <div className="flex-1 w-full flex items-center justify-center">
         <div className="relative w-full flex flex-col items-center justify-center">
           <img 
-            src="/lovable-uploads/b0005e2d-f148-4e97-bf93-12905d4c717d.png" 
+            src="/lovable-uploads/56a4c540-4515-438e-b425-23bbbd13444f.png" 
             alt="Record Player" 
             className="w-64 h-64 object-contain mx-auto"
           />

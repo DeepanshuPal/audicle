@@ -93,36 +93,34 @@ const ArticleView = ({
         )}
       </form>
       
-      <div className="flex-1 overflow-hidden h-[calc(70vh-80px)]">
-        <ScrollArea className="h-full w-full">
-          <div className="p-6">
-            {article ? (
-              <div className="prose prose-sm max-w-none">
-                <h1 className="text-2xl font-instrument font-bold mb-4">{article.title}</h1>
-                
-                {article.author && (
-                  <p className="text-sm text-gray-500 mb-4">
-                    By {article.author}
-                    {article.publishDate && ` • ${article.publishDate}`}
-                  </p>
-                )}
-                
-                <div dangerouslySetInnerHTML={{ __html: article.content }} />
+      <ScrollArea className="flex-1 overflow-auto h-[calc(70vh-80px)]">
+        <div className="p-6">
+          {article ? (
+            <div className="prose prose-sm max-w-none">
+              <h1 className="text-2xl font-instrument font-bold mb-4">{article.title}</h1>
+              
+              {article.author && (
+                <p className="text-sm text-gray-500 mb-4">
+                  By {article.author}
+                  {article.publishDate && ` • ${article.publishDate}`}
+                </p>
+              )}
+              
+              <div dangerouslySetInnerHTML={{ __html: article.content }} />
+            </div>
+          ) : (
+            <div className="h-full flex flex-col items-center justify-center text-gray-400">
+              <div className="text-center max-w-sm">
+                <h3 className="text-lg font-instrument font-medium mb-2">Paste an article URL above</h3>
+                <p className="text-sm">
+                  Enter the URL of any article and we'll convert it to audio. 
+                  You can listen to the full article or a condensed "crux" version.
+                </p>
               </div>
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center text-gray-400">
-                <div className="text-center max-w-sm">
-                  <h3 className="text-lg font-instrument font-medium mb-2">Paste an article URL above</h3>
-                  <p className="text-sm">
-                    Enter the URL of any article and we'll convert it to audio. 
-                    You can listen to the full article or a condensed "crux" version.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        </ScrollArea>
-      </div>
+            </div>
+          )}
+        </div>
+      </ScrollArea>
     </div>
   );
 };
