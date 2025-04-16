@@ -1,6 +1,5 @@
 
 import { useState, useRef, useEffect } from "react";
-import AudioWaveform from "./AudioWaveform";
 import AudioControls from "./AudioControls";
 import { PlayerState, AudioData, ProcessingStatus } from "@/lib/types";
 
@@ -130,28 +129,16 @@ const AudioPanel = ({
   };
   
   return (
-    <div className="h-full flex flex-col items-center justify-between p-8">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-audio-dark">
-          {isFullArticle ? fullArticleTitle : cruxTitle}
-        </h2>
-        <p className="text-sm text-gray-500 mt-1">
-          {isFullArticle 
-            ? "Full article audio playback" 
-            : "Condensed version with key points"}
-        </p>
+    <div className="h-full flex flex-col items-center justify-between">
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <img 
+          src="/lovable-uploads/record-player.png" 
+          alt="Record Player" 
+          className="w-48 h-48 object-contain mb-8"
+        />
       </div>
       
-      <div className="flex-1 w-full flex items-center justify-center">
-        <div className="relative w-full h-64 flex items-center justify-center">
-          <AudioWaveform 
-            isPlaying={playerState === PlayerState.PLAYING}
-            audioElement={audioRef.current}
-          />
-        </div>
-      </div>
-      
-      <div className="w-full mt-8">
+      <div className="w-full mt-auto">
         <AudioControls
           audioUrl={currentAudio?.url}
           isPlaying={playerState === PlayerState.PLAYING}
