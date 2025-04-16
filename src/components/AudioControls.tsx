@@ -9,8 +9,7 @@ import {
   Volume1, 
   VolumeX,
   DownloadIcon,
-  RefreshCw,
-  Sparkles
+  RefreshCw
 } from "lucide-react";
 
 interface AudioControlsProps {
@@ -67,97 +66,84 @@ const AudioControls = ({
     <div className="w-full space-y-4">
       {/* Progress slider */}
       <div className="space-y-2">
-        <div className="flex justify-between text-sm text-gray-500">
+        <Slider
+          value={[currentProgress]}
+          max={duration || 100}
+          step={1}
+          onValueChange={handleSliderChange}
+          disabled={loading || !audioUrl}
+          className="cursor-pointer"
+        />
+        <div className="flex justify-between text-xs text-gray-500">
           <span>{formatTime(currentProgress)}</span>
           <span>{formatTime(duration || 0)}</span>
         </div>
-        
-        <div className="w-full bg-gray-200 h-1 rounded-full overflow-hidden">
-          <div 
-            className="bg-blue-500 h-full rounded-full transition-all duration-300" 
-            style={{ width: `${(currentProgress / (duration || 1)) * 100}%` }}
-          ></div>
-        </div>
       </div>
       
-      {/* Play button */}
-      <div className="flex items-center justify-center">
-        <Button 
-          variant="outline"
-          size="icon"
-          className="w-12 h-12 rounded-full bg-white shadow-md hover:scale-105 transition-transform"
-          onClick={onPlayPause}
-          disabled={loading || !audioUrl}
-        >
-          {loading ? (
-            <RefreshCw size={18} className="animate-spin" />
-          ) : isPlaying ? (
-            <Pause size={18} />
-          ) : (
-            <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-blue-500 border-b-[8px] border-b-transparent ml-0.5"></div>
-          )}
-        </Button>
-      </div>
-      
-      {/* Volume control */}
-      <div className="flex items-center space-x-2">
-        <Button 
-          variant="ghost" 
-          size="icon"
-          className="h-8 w-8 text-gray-500"
-          onClick={() => {
-            setVolume(volume === 0 ? 0.5 : 0);
-            onVolumeChange(volume === 0 ? 0.5 : 0);
-          }}
-        >
-          {getVolumeIcon()}
-        </Button>
-        <div className="flex-1">
+      {/* Main controls */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2 w-24">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="h-8 w-8 text-audio-dark"
+            onClick={() => {
+              setVolume(volume === 0 ? 0.5 : 0);
+              onVolumeChange(volume === 0 ? 0.5 : 0);
+            }}
+          >
+            {getVolumeIcon()}
+          </Button>
           <Slider
             value={[volume]}
             min={0}
             max={1}
             step={0.01}
             onValueChange={handleVolumeChange}
-            className="w-full"
+            className="w-16"
           />
         </div>
-      </div>
-      
-      {/* Action buttons */}
-      <div className="flex justify-between gap-4 mt-4">
-        <Button 
-          className={`w-full ${isFullArticle ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
-          onClick={() => {
-            if (!isFullArticle) onToggleVersion();
-          }}
-          disabled={loading}
-        >
-          Full Article
-        </Button>
         
         <Button 
-          className={`w-full ${!isFullArticle ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
-          onClick={() => {
-            if (isFullArticle) onToggleVersion();
-          }}
-          disabled={loading}
+          variant="outline"
+          size="icon"
+          className={`h-14 w-14 rounded-full ${isPlaying ? 'bg-audio text-white' : 'bg-white text-audio-control border-audio/30'} shadow-md hover:scale-105 transition-transform`}
+          onClick={onPlayPause}
+          disabled={loading || !audioUrl}
         >
-          <Sparkles size={16} className="mr-2" />
-          Play the Crux
+          {loading ? (
+            <RefreshCw size={24} className="animate-spin" />
+          ) : isPlaying ? (
+            <Pause size={24} />
+          ) : (
+            <Play size={24} className="ml-1" />
+          )}
         </Button>
         
-        {audioUrl && (
+        <div className="flex items-center space-x-2 w-24 justify-end">
           <Button
             variant="outline"
-            size="icon"
-            asChild
+            size="sm"
+            className={`h-8 border-audio/30 hover:bg-audio hover:text-white ${!isFullArticle ? 'bg-audio text-white' : 'bg-white text-audio-control'}`}
+            onClick={onToggleVersion}
+            disabled={loading}
           >
-            <a href={audioUrl} download="audio.mp3" target="_blank" rel="noreferrer">
-              <DownloadIcon size={16} />
-            </a>
+            {isFullArticle ? "Play Crux" : "Full Article"}
           </Button>
-        )}
+          
+          {audioUrl && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-audio-dark"
+              asChild
+            >
+              <a href={audioUrl} download="audio.mp3" target="_blank" rel="noreferrer">
+                <DownloadIcon size={18} />
+              </a>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
