@@ -14,8 +14,8 @@ export async function convertToSpeech(
       throw new Error("ElevenLabs API key is required");
     }
     
-    // Set the voice ID to use
-    const voiceId = "21m00Tcm4TlvDq8ikWAM"; // Rachel voice
+    // Set the voice ID to Antoni
+    const voiceId = "ErXwobaYiN019PkySvjV"; // Antoni voice
     
     // Set the model ID to use
     const modelId = "eleven_multilingual_v2";

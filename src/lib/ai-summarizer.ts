@@ -2,7 +2,7 @@
 import { ArticleData } from "./types";
 
 /**
- * Generate a summarized "crux" version of the article content
+ * Generate a summarized "podcast" version of the article content
  */
 export async function generateSummary(
   article: ArticleData,
@@ -28,24 +28,25 @@ export async function generateSummary(
         messages: [
           {
             role: "system",
-            content: `You are an expert podcast script writer who can distill complex articles into engaging, concise summaries. Your task is to create a podcast-style summary of the provided article that can be narrated in under 2 minutes (approximately 300-350 words).
+            content: `You are an expert podcast script writer who can distill complex articles into engaging, concise audio summaries. Your task is to create a podcast-style version of the provided article that can be narrated in about 5-7 minutes (approximately 800-1000 words).
 
-            Your summary should:
-            1. Begin with an engaging podcast-style introduction
-            2. Capture the main points and key insights of the article
-            3. Maintain a conversational tone suitable for audio consumption
-            4. Include a brief conclusion that wraps up the main message
-            5. Avoid unnecessary details while preserving the core value of the content
+            Your podcast script should:
+            1. Begin with an engaging podcast-style introduction that hooks the listener
+            2. Capture the main points and key insights of the article in a narrative format
+            3. Maintain a conversational, friendly tone suitable for audio consumption
+            4. Use transitions and audio-friendly language (avoid visual references)
+            5. Include interesting quotes or statistics from the original when relevant
+            6. End with a thoughtful conclusion that summarizes the key takeaways
             
-            Format the summary as a complete script ready to be read aloud, with natural transitions and clear structure.`
+            Format the script as a complete podcast episode ready to be narrated, with natural transitions and clear structure. Do not include sound effect instructions or segment markers - just the narration text.`
           },
           {
             role: "user",
-            content: `${article.title}\n\n${plainText}`
+            content: `Article Title: ${article.title}\n\nArticle Content: ${plainText}`
           }
         ],
         temperature: 0.7,
-        max_tokens: 500
+        max_tokens: 1500
       })
     });
     
@@ -60,13 +61,15 @@ export async function generateSummary(
     
     // Return a mock summary if there's an error
     return `
-      Welcome to The Crux, where we distill essential information into bite-sized audio. I'm your host, and today we're exploring ${article.title}.
+      Welcome to Audicle, where we transform articles into audio experiences. Today we're exploring ${article.title}.
       
-      The article discusses several key points about ${article.title.toLowerCase()}, including its importance in modern contexts and practical applications.
+      This article discusses several fascinating aspects of this topic, including its historical context and modern applications.
       
-      The author emphasizes that understanding this topic can lead to significant improvements in how we approach related challenges.
+      The author presents compelling evidence about how this subject affects various aspects of our lives and offers insights into potential future developments.
       
-      In conclusion, this article provides valuable insights that can help readers better navigate this subject. This has been The Crux of ${article.title}. Thanks for listening!
+      Key points include the relationship between the main concepts, practical applications, and expert opinions that shed light on complex aspects.
+      
+      To conclude, this article provides a comprehensive overview that helps us better understand the nuances of ${article.title.toLowerCase()}. Thanks for listening to this Audicle podcast summary.
     `;
   }
 }

@@ -9,6 +9,7 @@ import { generateSummary } from "@/lib/ai-summarizer";
 import ArticleView from "@/components/ArticleView";
 import AudioPanel from "@/components/AudioPanel";
 import ApiKeyModal from "@/components/ApiKeyModal";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const Index = () => {
   // API Keys
@@ -92,72 +93,74 @@ const Index = () => {
   };
   
   return (
-    <div className="flex flex-col min-h-screen font-inter">
-      {/* Header */}
-      <header className="border-b bg-white p-4">
-        <div className="container mx-auto text-center">
-          <h1 className="text-4xl font-instrument font-bold text-audio-dark">
-            Audicle
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Convert articles to audio with AI summarization
-          </p>
-          <div className="absolute top-4 right-4">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => setIsApiKeyModalOpen(true)}
-              className="border-audio/30 text-audio-dark hover:bg-audio hover:text-white"
-            >
-              <Settings className="h-4 w-4 mr-2" />
-              API Keys
-            </Button>
+    <TooltipProvider>
+      <div className="flex flex-col min-h-screen font-inter">
+        {/* Header */}
+        <header className="border-b bg-white p-4">
+          <div className="container mx-auto text-center">
+            <h1 className="text-4xl font-instrument font-bold text-audio-dark">
+              Audicle
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Convert articles to audio with AI summarization
+            </p>
+            <div className="absolute top-4 right-4">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setIsApiKeyModalOpen(true)}
+                className="border-audio/30 text-audio-dark hover:bg-audio hover:text-white"
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                API Keys
+              </Button>
+            </div>
           </div>
-        </div>
-      </header>
-      
-      {/* Main content */}
-      <main className="flex-1 container mx-auto py-6 px-4 flex flex-col">
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 h-[70vh]">
-          {/* Left panel */}
-          <div className="article-panel overflow-hidden">
-            <ArticleView
-              article={article}
-              status={status}
-              onSubmitUrl={handleSubmitUrl}
-              error={error}
-            />
+        </header>
+        
+        {/* Main content */}
+        <main className="flex-1 container mx-auto py-6 px-4 flex flex-col">
+          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 h-[70vh]">
+            {/* Left panel */}
+            <div className="article-panel overflow-hidden">
+              <ArticleView
+                article={article}
+                status={status}
+                onSubmitUrl={handleSubmitUrl}
+                error={error}
+              />
+            </div>
+            
+            {/* Right panel */}
+            <div className="audio-panel overflow-hidden">
+              <AudioPanel
+                fullArticleAudio={fullArticleAudio}
+                cruxAudio={cruxAudio}
+                status={status}
+                fullArticleTitle={article?.title}
+                cruxTitle="The Crux"
+              />
+            </div>
           </div>
-          
-          {/* Right panel */}
-          <div className="audio-panel overflow-hidden">
-            <AudioPanel
-              fullArticleAudio={fullArticleAudio}
-              cruxAudio={cruxAudio}
-              status={status}
-              fullArticleTitle={article?.title}
-              cruxTitle="The Crux"
-            />
+        </main>
+        
+        {/* Footer */}
+        <footer className="border-t bg-white p-4 text-center text-sm text-gray-500">
+          <div className="container mx-auto">
+            <p>
+              Audicle • Convert articles to audio with AI summarization
+            </p>
           </div>
-        </div>
-      </main>
-      
-      {/* Footer */}
-      <footer className="border-t bg-white p-4 text-center text-sm text-gray-500">
-        <div className="container mx-auto">
-          <p>
-            Audicle • Convert articles to audio with AI summarization
-          </p>
-        </div>
-      </footer>
-      
-      {/* API Key Modal */}
-      <ApiKeyModal
-        isOpen={isApiKeyModalOpen}
-        onClose={() => setIsApiKeyModalOpen(false)}
-        onSaveKeys={handleSaveApiKeys}
-      />
-    </div>
+        </footer>
+        
+        {/* API Key Modal */}
+        <ApiKeyModal
+          isOpen={isApiKeyModalOpen}
+          onClose={() => setIsApiKeyModalOpen(false)}
+          onSaveKeys={handleSaveApiKeys}
+        />
+      </div>
+    </TooltipProvider>
   );
 };
 
