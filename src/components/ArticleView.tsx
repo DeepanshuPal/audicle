@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Link as LinkIcon } from "lucide-react";
 import { ArticleData, ProcessingStatus } from "@/lib/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface ArticleViewProps {
   article: ArticleData | null;
@@ -87,9 +88,9 @@ const ArticleView = ({
         )}
         
         {error && (
-          <div className="mt-2 text-sm text-red-500">
-            {error}
-          </div>
+          <Alert variant="destructive" className="mt-2">
+            <AlertDescription className="text-sm">{error}</AlertDescription>
+          </Alert>
         )}
       </form>
       
