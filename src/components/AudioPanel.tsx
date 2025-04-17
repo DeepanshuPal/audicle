@@ -1,33 +1,26 @@
 
 import { useState, useRef, useEffect } from "react";
-import AudioWaveform from "./AudioWaveform";
 import AudioControls from "./AudioControls";
 import { PlayerState, AudioData, ProcessingStatus } from "@/lib/types";
 
 interface AudioPanelProps {
-  fullArticleAudio: AudioData | null;
-  cruxAudio: AudioData | null;
+  audioData: AudioData | null;
   status: ProcessingStatus;
-  fullArticleTitle?: string;
-  cruxTitle?: string;
+  articleTitle?: string;
 }
 
 const AudioPanel = ({
-  fullArticleAudio,
-  cruxAudio,
+  audioData,
   status,
-  fullArticleTitle = "Full Article",
-  cruxTitle = "The Crux"
+  articleTitle = "Article Audio"
 }: AudioPanelProps) => {
   const [playerState, setPlayerState] = useState<PlayerState>(PlayerState.IDLE);
-  const [isFullArticle, setIsFullArticle] = useState(true);
   const [volume, setVolume] = useState(0.8);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
-  const currentAudio = isFullArticle ? fullArticleAudio : cruxAudio;
   const isLoading = status === ProcessingStatus.LOADING || 
                     status === ProcessingStatus.EXTRACTING ||
                     status === ProcessingStatus.SUMMARIZING ||
@@ -68,12 +61,12 @@ const AudioPanel = ({
   
   // Update audio source when it changes
   useEffect(() => {
-    if (!audioRef.current || !currentAudio?.url) return;
+    if (!audioRef.current || !audioData?.url) return;
     
     const wasPlaying = playerState === PlayerState.PLAYING;
     
     // Set new source
-    audioRef.current.src = currentAudio.url;
+    audioRef.current.src = audioData.url;
     audioRef.current.load();
     
     // Restart playback if it was playing
@@ -85,14 +78,14 @@ const AudioPanel = ({
     }
     
     // Set duration if available
-    if (currentAudio.duration) {
-      setDuration(currentAudio.duration);
+    if (audioData.duration) {
+      setDuration(audioData.duration);
     }
-  }, [currentAudio?.url, playerState]);
+  }, [audioData?.url, playerState]);
   
   // Handle play/pause
   const togglePlayPause = () => {
-    if (!audioRef.current || !currentAudio?.url) return;
+    if (!audioRef.current || !audioData?.url) return;
     
     if (playerState === PlayerState.PLAYING) {
       audioRef.current.pause();
@@ -122,23 +115,14 @@ const AudioPanel = ({
     }
   };
   
-  // Toggle between full article and crux
-  const toggleVersion = () => {
-    setIsFullArticle(!isFullArticle);
-    setPlayerState(PlayerState.IDLE);
-    setCurrentTime(0);
-  };
-  
   return (
     <div className="h-full flex flex-col items-center justify-between p-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-instrument font-bold text-audio-dark">
-          {isFullArticle ? fullArticleTitle : cruxTitle}
+          {articleTitle || "Article Audio"}
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          {isFullArticle 
-            ? "Full article audio playback" 
-            : "Condensed version with key points"}
+          Podcast-style audio summary
         </p>
       </div>
       
@@ -161,12 +145,10 @@ const AudioPanel = ({
       
       <div className="w-full mt-8">
         <AudioControls
-          audioUrl={currentAudio?.url}
+          audioUrl={audioData?.url}
           isPlaying={playerState === PlayerState.PLAYING}
           onPlayPause={togglePlayPause}
           onVolumeChange={handleVolumeChange}
-          isFullArticle={isFullArticle}
-          onToggleVersion={toggleVersion}
           currentProgress={currentTime}
           duration={duration}
           onSeek={handleSeek}

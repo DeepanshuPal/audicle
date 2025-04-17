@@ -6,7 +6,6 @@ import { AudioData } from "./types";
  */
 export async function convertToSpeech(
   text: string, 
-  isFullArticle = true,
   apiKey: string = ""
 ): Promise<AudioData> {
   try {
@@ -17,8 +16,8 @@ export async function convertToSpeech(
     // Set the voice ID to Antoni
     const voiceId = "ErXwobaYiN019PkySvjV"; // Antoni voice
     
-    // Set the model ID to use
-    const modelId = "eleven_multilingual_v2";
+    // Set the model ID to use Flash v2.5
+    const modelId = "eleven_flash_v2_5";
     
     // Make the API request
     const response = await fetch(
@@ -44,12 +43,10 @@ export async function convertToSpeech(
       // If API key is invalid or other error, fall back to samples
       console.error("ElevenLabs API error:", response.status);
       
-      // Fallback to sample audio files
+      // Fallback to sample audio file
       return {
-        url: isFullArticle 
-          ? "https://cdn.freesound.org/previews/367/367749_6687864-lq.mp3" // Sample audio for full article
-          : "https://cdn.freesound.org/previews/376/376656_6687864-lq.mp3", // Sample audio for summary
-        duration: isFullArticle ? 120 : 30 // Approximate durations
+        url: "https://cdn.freesound.org/previews/367/367749_6687864-lq.mp3", // Sample audio
+        duration: 120 // Approximate duration
       };
     }
 
@@ -72,19 +69,17 @@ export async function convertToSpeech(
       audio.onerror = () => {
         resolve({
           url,
-          duration: isFullArticle ? 120 : 30
+          duration: 120
         });
       };
     });
   } catch (error) {
     console.error("Error converting text to speech:", error);
     
-    // Fallback to sample audio files
+    // Fallback to sample audio file
     return {
-      url: isFullArticle 
-        ? "https://cdn.freesound.org/previews/367/367749_6687864-lq.mp3" // Sample audio for full article
-        : "https://cdn.freesound.org/previews/376/376656_6687864-lq.mp3", // Sample audio for summary
-      duration: isFullArticle ? 120 : 30 // Approximate durations
+      url: "https://cdn.freesound.org/previews/367/367749_6687864-lq.mp3", // Sample audio
+      duration: 120 // Approximate duration
     };
   }
 }

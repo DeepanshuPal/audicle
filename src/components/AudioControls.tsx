@@ -8,7 +8,7 @@ import {
   Volume2, 
   Volume1, 
   VolumeX,
-  DownloadIcon,
+  Download,
   RefreshCw
 } from "lucide-react";
 
@@ -17,8 +17,6 @@ interface AudioControlsProps {
   isPlaying: boolean;
   onPlayPause: () => void;
   onVolumeChange: (volume: number) => void;
-  isFullArticle: boolean;
-  onToggleVersion: () => void;
   currentProgress: number;
   duration: number;
   onSeek: (position: number) => void;
@@ -30,8 +28,6 @@ const AudioControls = ({
   isPlaying,
   onPlayPause,
   onVolumeChange,
-  isFullArticle,
-  onToggleVersion,
   currentProgress,
   duration,
   onSeek,
@@ -121,25 +117,16 @@ const AudioControls = ({
         </Button>
         
         <div className="flex items-center space-x-2 w-24 justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            className={`h-8 border-audio/30 hover:bg-audio hover:text-white ${!isFullArticle ? 'bg-audio text-white' : 'bg-white text-audio-control'}`}
-            onClick={onToggleVersion}
-            disabled={loading}
-          >
-            {isFullArticle ? "Play Crux" : "Full Article"}
-          </Button>
-          
           {audioUrl && (
             <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-audio-dark"
+              variant="outline"
+              className="h-9 border-audio/30 bg-audio text-white hover:bg-audio-dark hover:text-white flex items-center gap-2"
               asChild
+              disabled={loading || !audioUrl}
             >
               <a href={audioUrl} download="audio.mp3" target="_blank" rel="noreferrer">
-                <DownloadIcon size={18} />
+                <Download size={16} />
+                <span>Download</span>
               </a>
             </Button>
           )}

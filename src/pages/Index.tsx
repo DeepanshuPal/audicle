@@ -12,9 +12,8 @@ import ApiKeyModal from "@/components/ApiKeyModal";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const Index = () => {
-  // API Keys
+  // API Key
   const [elevenlabsKey, setElevenlabsKey] = useState<string>("");
-  const [openaiKey, setOpenaiKey] = useState<string>("");
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   
   // Processing state
@@ -24,25 +23,18 @@ const Index = () => {
   // Content state
   const [article, setArticle] = useState<ArticleData | null>(null);
   const [summary, setSummary] = useState<string | null>(null);
-  const [fullArticleAudio, setFullArticleAudio] = useState<AudioData | null>(null);
-  const [cruxAudio, setCruxAudio] = useState<AudioData | null>(null);
+  const [audioData, setAudioData] = useState<AudioData | null>(null);
   
-  // Load API keys from local storage
+  // Load API key from local storage
   useEffect(() => {
     const savedElevenlabsKey = localStorage.getItem("elevenlabs-api-key");
-    const savedOpenaiKey = localStorage.getItem("openai-api-key");
-    
     if (savedElevenlabsKey) setElevenlabsKey(savedElevenlabsKey);
-    if (savedOpenaiKey) setOpenaiKey(savedOpenaiKey);
   }, []);
   
-  // Save API keys to local storage
-  const handleSaveApiKeys = (elevenlabsKey: string, openaiKey: string) => {
+  // Save API key to local storage
+  const handleSaveApiKey = (elevenlabsKey: string) => {
     setElevenlabsKey(elevenlabsKey);
-    setOpenaiKey(openaiKey);
-    
     localStorage.setItem("elevenlabs-api-key", elevenlabsKey);
-    localStorage.setItem("openai-api-key", openaiKey);
   };
   
   // Handle URL submission
@@ -53,8 +45,7 @@ const Index = () => {
       setError(null);
       setArticle(null);
       setSummary(null);
-      setFullArticleAudio(null);
-      setCruxAudio(null);
+      setAudioData(null);
       
       // Extract article
       setStatus(ProcessingStatus.EXTRACTING);
@@ -63,25 +54,16 @@ const Index = () => {
       
       // Generate summary
       setStatus(ProcessingStatus.SUMMARIZING);
-      const articleSummary = await generateSummary(extractedArticle, openaiKey);
+      const articleSummary = await generateSummary(extractedArticle);
       setSummary(articleSummary);
       
-      // Convert full article to speech
-      setStatus(ProcessingStatus.CONVERTING);
-      const fullAudio = await convertToSpeech(
-        extractedArticle.content,
-        true,
-        elevenlabsKey
-      );
-      setFullArticleAudio(fullAudio);
-      
       // Convert summary to speech
+      setStatus(ProcessingStatus.CONVERTING);
       const summaryAudio = await convertToSpeech(
         articleSummary,
-        false,
         elevenlabsKey
       );
-      setCruxAudio(summaryAudio);
+      setAudioData(summaryAudio);
       
       // Done!
       setStatus(ProcessingStatus.READY);
@@ -112,7 +94,7 @@ const Index = () => {
                 className="border-audio/30 text-audio-dark hover:bg-audio hover:text-white"
               >
                 <Settings className="h-4 w-4 mr-2" />
-                API Keys
+                API Key
               </Button>
             </div>
           </div>
@@ -121,8 +103,8 @@ const Index = () => {
         {/* Main content */}
         <main className="flex-1 container mx-auto py-6 px-4 flex flex-col">
           <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 h-[70vh]">
-            {/* Left panel */}
-            <div className="article-panel overflow-hidden">
+            {/* Left panel - Article view */}
+            <div className="article-panel h-full overflow-hidden flex flex-col border rounded-lg shadow-sm">
               <ArticleView
                 article={article}
                 status={status}
@@ -131,14 +113,12 @@ const Index = () => {
               />
             </div>
             
-            {/* Right panel */}
-            <div className="audio-panel overflow-hidden">
+            {/* Right panel - Audio player */}
+            <div className="audio-panel h-full overflow-hidden border rounded-lg shadow-sm">
               <AudioPanel
-                fullArticleAudio={fullArticleAudio}
-                cruxAudio={cruxAudio}
+                audioData={audioData}
                 status={status}
-                fullArticleTitle={article?.title}
-                cruxTitle="The Crux"
+                articleTitle={article?.title}
               />
             </div>
           </div>
@@ -157,7 +137,7 @@ const Index = () => {
         <ApiKeyModal
           isOpen={isApiKeyModalOpen}
           onClose={() => setIsApiKeyModalOpen(false)}
-          onSaveKeys={handleSaveApiKeys}
+          onSaveKeys={handleSaveApiKey}
         />
       </div>
     </TooltipProvider>

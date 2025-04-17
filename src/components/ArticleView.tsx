@@ -40,7 +40,7 @@ const ArticleView = ({
       case ProcessingStatus.EXTRACTING:
         return "Extracting article...";
       case ProcessingStatus.SUMMARIZING:
-        return "Creating the crux summary...";
+        return "Creating podcast summary...";
       case ProcessingStatus.CONVERTING:
         return "Converting to audio...";
       default:
@@ -93,7 +93,7 @@ const ArticleView = ({
         )}
       </form>
       
-      <ScrollArea className="flex-1 overflow-auto h-[calc(70vh-80px)]">
+      <ScrollArea className="flex-1 h-[calc(70vh-80px)]">
         <div className="p-6">
           {article ? (
             <div className="prose prose-sm max-w-none">
@@ -113,8 +113,7 @@ const ArticleView = ({
               <div className="text-center max-w-sm">
                 <h3 className="text-lg font-instrument font-medium mb-2">Paste an article URL above</h3>
                 <p className="text-sm">
-                  Enter the URL of any article and we'll convert it to audio. 
-                  You can listen to the full article or a condensed "crux" version.
+                  Enter the URL of any article and we'll convert it to podcast-style audio.
                 </p>
               </div>
             </div>
