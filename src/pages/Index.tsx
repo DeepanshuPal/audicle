@@ -9,11 +9,13 @@ import ArticleView from "@/components/ArticleView";
 import AudioPanel from "@/components/AudioPanel";
 import ApiKeyModal from "@/components/ApiKeyModal";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   // API Key
   const [elevenlabsKey, setElevenlabsKey] = useState<string>("");
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
+  const { toast } = useToast();
   
   // Processing state
   const [status, setStatus] = useState<ProcessingStatus>(ProcessingStatus.IDLE);
@@ -59,21 +61,35 @@ const Index = () => {
       
       // Extract article
       setStatus(ProcessingStatus.EXTRACTING);
+      console.log("Extracting article from URL:", url);
       const extractedArticle = await extractArticle(url);
+      console.log("Article extracted successfully:", extractedArticle.title);
       setArticle(extractedArticle);
       
-      // Process article text (skip summarization)
-      setStatus(ProcessingStatus.SUMMARIZING);
+      // Check if we have an ElevenLabs API key
+      if (!elevenlabsKey) {
+        toast({
+          title: "API Key Required",
+          description: "Please set your ElevenLabs API key to convert the article to audio.",
+          variant: "destructive"
+        });
+        setStatus(ProcessingStatus.ERROR);
+        setError("ElevenLabs API key is required to convert to audio.");
+        return;
+      }
       
       // Get article text content
+      setStatus(ProcessingStatus.CONVERTING);
+      console.log("Converting article to speech");
       const articleText = extractedArticle.title + ". " + getPlainTextFromHTML(extractedArticle.content);
+      console.log("Article text length:", articleText.length);
       
       // Convert article text to speech
-      setStatus(ProcessingStatus.CONVERTING);
       const audioData = await convertToSpeech(
         articleText,
         elevenlabsKey
       );
+      console.log("Speech conversion complete, audio URL created");
       setAudioData(audioData);
       
       // Done!
@@ -82,6 +98,12 @@ const Index = () => {
       console.error("Error processing article:", error);
       setError(error instanceof Error ? error.message : "Unknown error occurred");
       setStatus(ProcessingStatus.ERROR);
+      
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to process article",
+        variant: "destructive"
+      });
     }
   };
   
