@@ -40,7 +40,7 @@ const ArticleView = ({
       case ProcessingStatus.EXTRACTING:
         return "Extracting article...";
       case ProcessingStatus.SUMMARIZING:
-        return "Creating podcast summary...";
+        return "Processing article...";
       case ProcessingStatus.CONVERTING:
         return "Converting to audio...";
       default:
@@ -93,7 +93,7 @@ const ArticleView = ({
         )}
       </form>
       
-      <ScrollArea className="flex-1 h-[calc(70vh-80px)]">
+      <ScrollArea className="flex-1">
         <div className="p-6">
           {article ? (
             <div className="prose prose-sm max-w-none">

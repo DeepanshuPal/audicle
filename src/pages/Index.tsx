@@ -5,7 +5,6 @@ import { Settings } from "lucide-react";
 import { ArticleData, AudioData, ProcessingStatus } from "@/lib/types";
 import { extractArticle } from "@/lib/article-extractor";
 import { convertToSpeech } from "@/lib/text-to-speech";
-import { generateSummary } from "@/lib/ai-summarizer";
 import ArticleView from "@/components/ArticleView";
 import AudioPanel from "@/components/AudioPanel";
 import ApiKeyModal from "@/components/ApiKeyModal";
@@ -22,7 +21,6 @@ const Index = () => {
   
   // Content state
   const [article, setArticle] = useState<ArticleData | null>(null);
-  const [summary, setSummary] = useState<string | null>(null);
   const [audioData, setAudioData] = useState<AudioData | null>(null);
   
   // Load API key from local storage
@@ -37,6 +35,19 @@ const Index = () => {
     localStorage.setItem("elevenlabs-api-key", elevenlabsKey);
   };
   
+  // Get the plain text content from HTML
+  const getPlainTextFromHTML = (html: string): string => {
+    // Create a temporary div to hold the HTML content
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    // Get the text content
+    const text = tempDiv.textContent || tempDiv.innerText || "";
+    
+    // Clean up the text (remove extra whitespace)
+    return text.replace(/\s+/g, ' ').trim();
+  };
+  
   // Handle URL submission
   const handleSubmitUrl = async (url: string) => {
     try {
@@ -44,7 +55,6 @@ const Index = () => {
       setStatus(ProcessingStatus.LOADING);
       setError(null);
       setArticle(null);
-      setSummary(null);
       setAudioData(null);
       
       // Extract article
@@ -52,18 +62,19 @@ const Index = () => {
       const extractedArticle = await extractArticle(url);
       setArticle(extractedArticle);
       
-      // Generate summary
+      // Process article text (skip summarization)
       setStatus(ProcessingStatus.SUMMARIZING);
-      const articleSummary = await generateSummary(extractedArticle);
-      setSummary(articleSummary);
       
-      // Convert summary to speech
+      // Get article text content
+      const articleText = extractedArticle.title + ". " + getPlainTextFromHTML(extractedArticle.content);
+      
+      // Convert article text to speech
       setStatus(ProcessingStatus.CONVERTING);
-      const summaryAudio = await convertToSpeech(
-        articleSummary,
+      const audioData = await convertToSpeech(
+        articleText,
         elevenlabsKey
       );
-      setAudioData(summaryAudio);
+      setAudioData(audioData);
       
       // Done!
       setStatus(ProcessingStatus.READY);
@@ -84,7 +95,7 @@ const Index = () => {
               Audicle
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              Convert articles to audio with AI summarization
+              Convert articles to audio
             </p>
             <div className="absolute top-4 right-4">
               <Button 
@@ -128,7 +139,7 @@ const Index = () => {
         <footer className="border-t bg-white p-4 text-center text-sm text-gray-500">
           <div className="container mx-auto">
             <p>
-              Audicle • Convert articles to audio with AI summarization
+              Audicle • Convert articles to audio
             </p>
           </div>
         </footer>
